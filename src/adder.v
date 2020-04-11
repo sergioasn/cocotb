@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
 //*****************************************************************************
-// File:           angle_gen.v
+// File:           adder.v
 // Project:
-// Author:         PTrujillo
-// Description:    Own angle generator
+// Author:         salonso
+// Description:    adder
 // Limitations/Bugs:
 //*****************************************************************************
 module adder(
