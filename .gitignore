@@ -1,0 +1,15 @@
+*.gcda
+*.gcno
+*.info
+*.o
+*.cf
+*.tmp
+*.csv
+*.txt
+*.project
+*.pyc
+*.s
+/tb/build
+/tb/sim_build
+*.xml
+*.vcd
