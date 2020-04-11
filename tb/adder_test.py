@@ -93,9 +93,7 @@ def check(dut,data0_in,data1_in):
             "Randomised test failed with: %s + %s = %s" %
             (int(dut.data0_in), int(dut.data1_in), int(dut.data_out)))
     #else:  # these last two lines are not strictly necessary
-
         #dut._log.info("Ok!")
-
 
 @cocotb.test(skip = False, stage=1)
 def adder_test(dut):
@@ -122,9 +120,6 @@ def adder_test(dut):
         check(dut,dataIn[i],dataIn[i+1])
     # Stop the stimulus
     dut.dv <= 0
-    # Waiting for the last DV
-    # yield Timer(CLK_PERIOD*20)
-    # yield FallingEdge(dut.dv_out)
 
     coverage =coverage_db["top"].cover_percentage
     dut._log.info("Coverage = %f %%", coverage)
