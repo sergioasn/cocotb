@@ -64,14 +64,30 @@ class TB(object):
         self.scoreboard = Scoreboard(dut)
         self.scoreboard.add_interface(self.output_mon, self.expected_output, strict_type=True)
 
-    def model(self,data):
-        outModel = adder_model(data[0],data[1])
-        self.expected_output.append(int(outModel))
+    def model(self,transaction):
+        #transaction viene de input monitos _recv, ese dato es transaction
+        # if not self.stopped:
+            # self.expected_output.append(transaction)
+        outModel = transaction[0]+transaction[1]
+        self.expected_output.append(outModel)
+
+    # def start(self):
+    #     """Start generating input data."""
+    #     self.input_mon.start()
+    #
+    # def stop(self):
+    #     """Stop generating input data.
+    #     Also stop generation of expected output transactions.
+    #     One more clock cycle must be executed afterwards so that the output of
+    #     the D flip-flop can be checked.
+    #     """
+    #     # self.input_drv.stop()
+    #     self.stopped = True
 
 # ==============================================================================
 def gen_input():
     # Generate random data
-    dataOutInt = np.random.randint(0,2**8,10)
+    dataOutInt = np.random.randint(0,2**2,10)
     return dataOutInt
 
 # # ==============================================================================
@@ -86,14 +102,14 @@ ADDER_Coverage = coverage_section (
   CoverCross(name ="top.rwXfull", items = ["top.(A <150)", "top.(A >250)"]),
 )
 # # ==============================================================================
-@ADDER_Coverage
-def check(dut,data0_in,data1_in):
-    if int(dut.data_out) != adder_model(data0_in,data1_in):
-        raise TestFailure(
-            "Randomised test failed with: %s + %s = %s" %
-            (int(dut.data0_in), int(dut.data1_in), int(dut.data_out)))
-    #else:  # these last two lines are not strictly necessary
-        #dut._log.info("Ok!")
+# @ADDER_Coverage
+# def check(dut,data0_in,data1_in):
+#     if int(dut.data_out) != adder_model(data0_in,data1_in):
+#         raise TestFailure(
+#             "Randomised test failed with: %s + %s = %s" %
+#             (int(dut.data0_in), int(dut.data1_in), int(dut.data_out)))
+#     #else:  # these last two lines are not strictly necessary
+#         #dut._log.info("Ok!")
 
 @cocotb.test(skip = False, stage=1)
 def adder_test(dut):
@@ -116,12 +132,13 @@ def adder_test(dut):
         dut.data1_in <= int(dataIn[i+1])
         # yield Timer(CLK_PERIOD)
         # dut.dv <= 0
+        # tb.model(dataIn[i],dataIn[i+1])
         yield Timer(CLK_PERIOD*2)
-        check(dut,dataIn[i],dataIn[i+1])
+        # check(dut,dataIn[i],dataIn[i+1])
     # Stop the stimulus
     dut.dv <= 0
 
-    coverage =coverage_db["top"].cover_percentage
-    dut._log.info("Coverage = %f %%", coverage)
+    # coverage =coverage_db["top"].cover_percentage
+    # dut._log.info("Coverage = %f %%", coverage)
     # coverage_db.report_coverage(dut._log.info, bins=True)
     # coverage_db.export_to_xml(xml_name="coverage.xml")
