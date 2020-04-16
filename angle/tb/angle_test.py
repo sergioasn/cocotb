@@ -15,12 +15,12 @@ import math
 import struct
 # ==============================================================================
 class inMonitor(Monitor):
-    def __init__(self, name, clock, theta_in ,freq, SEQUENCE,callback=None, event=None):
+    def __init__(self, name, clock, theta_in ,freq, sequence_in,callback=None, event=None):
         self.name = name
         self.clock = clock
         self.theta_in = theta_in
         self.freq = freq
-        self.SEQUENCE = SEQUENCE
+        self.sequence_in = sequence_in
         # self.data = event
         Monitor.__init__(self, callback, event)
 
@@ -30,7 +30,7 @@ class inMonitor(Monitor):
         while True:
             # Capture signal at rising edge of clock
             yield clkedge
-            vec = [int(self.theta_in.value), int(self.freq.value)]
+            vec = [int(self.theta_in.value), int(self.freq.value), int(self.sequence_in.value)]
             self._recv(vec)
 # ==============================================================================
 class outMonitor(Monitor):
@@ -60,7 +60,7 @@ class TB(object):
         #input driver solo para bit
         # self.input_drv = BitDriver(signal=dut.theta_in, clk=dut.clk, generator=gen_input())
         # Input monitor
-        self.input_mon = inMonitor("input", dut.clk, dut.theta_in, dut.freq,dut.SEQUENCE, callback=self.model)
+        self.input_mon = inMonitor("input", dut.clk, dut.theta_in, dut.freq,dut.sequence_in, callback=self.model)
         # Output monitor
         self.output_mon = outMonitor("output", dut.theta_out, dut.clk, dut.CYCLE)
         self.expected_output = []
@@ -68,7 +68,7 @@ class TB(object):
         self.scoreboard.add_interface(self.output_mon, self.expected_output, strict_type=True)
 
     def model(self,transaction):
-        outModel = angle_model(transaction[0],transaction[1])
+        outModel = angle_model(transaction[0],transaction[1],transaction[2])
         # print('outmodel')
         # print (outModel)
         self.expected_output.append(int(outModel))
@@ -78,7 +78,9 @@ def gen_input(loop):
     # Generate random data tupla
     data_gen = np.random.randint(0,2**8,loop)
     wait_gen= np.random.randint(0,2**12,loop)
-    return [data_gen,wait_gen]
+    sequence_gen= np.random.randint(0,2, loop)
+    # print(sequence_gen)
+    return [data_gen,wait_gen,sequence_gen]
 
 # # ==============================================================================
 # ADDER_Coverage = coverage_section (
@@ -107,20 +109,23 @@ def angle_test(dut):
     dut.RESET <= 1
     # Create clock
     CLK_PERIOD = 10
+    test=100
     cocotb.fork(Clock(dut.clk, CLK_PERIOD).start())
     yield Timer(CLK_PERIOD * 5)
     dut.RESET <= 0
     # call function of generate data
-    dut.SEQUENCE <= 1
+    # dut.sequence_in <= 1
+    dut.freq <= 1
     # call TB class
     tb = TB(dut)
     # yield Timer(CLK_PERIOD)
-    stimulus=gen_input(2)
+    stimulus=gen_input(test)
     data_in=stimulus[0]
     wait_in=stimulus[1]
-    # print(data_in[0,0])
+    seq_in=stimulus[2]
     for i in range(0,len(data_in)):
         dut.theta_in <= int(data_in[i])
+        dut.sequence_in<= int(seq_in[i])
         yield Timer(CLK_PERIOD*wait_in[i])
     # Stop the stimulus
     yield Timer(CLK_PERIOD*5)

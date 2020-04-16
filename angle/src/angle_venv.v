@@ -12,7 +12,7 @@ module angle_venv(
   input RESET,
   input [9:0] theta_in,
   input [1:0] freq, /* 1 = 50Hz; 0 = 60Hz, 2 = CLK(SIMU), 3 = 60Hz(SIMU) */
-  input SEQUENCE,
+  input sequence_in,
   output reg CYCLE,
   output [9:0] theta_out
   );
@@ -46,7 +46,7 @@ always @ (posedge clk) begin
     // end
     else begin
       if( freq < 3) begin /* No new angle received */
-        if( SEQUENCE) begin
+        if( sequence_in) begin
           if( theta_gen_aux < 1023) begin
             theta_gen_aux <= theta_gen_aux + 1;
             CYCLE <= 1;
