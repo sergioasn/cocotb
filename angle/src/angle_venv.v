@@ -1,11 +1,4 @@
 `timescale 1ns / 1ps
-//*****************************************************************************
-// File:           angle_gen.v
-// Project:
-// Author:         PTrujillo
-// Description:    Own angle generator
-// Limitations/Bugs:
-//*****************************************************************************
 
 module angle_venv(
   input clk,
