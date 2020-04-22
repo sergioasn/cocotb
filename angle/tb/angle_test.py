@@ -34,11 +34,10 @@ class inMonitor(Monitor):
             self._recv(vec)
 # ==============================================================================
 class outMonitor(Monitor):
-    def __init__(self, name, theta_out, clock, CYCLE, callback=None, event=None):
+    def __init__(self, name, theta_out, clock,callback=None, event=None):
         self.name = name
         self.theta_out = theta_out
         self.clock = clock
-        self.CYCLE = CYCLE
         Monitor.__init__(self, callback, event)
 
     @cocotb.coroutine
@@ -62,7 +61,7 @@ class TB(object):
         # Input monitor
         self.input_mon = inMonitor("input", dut.clk, dut.theta_in, dut.freq,dut.sequence_in, callback=self.model)
         # Output monitor
-        self.output_mon = outMonitor("output", dut.theta_out, dut.clk, dut.CYCLE)
+        self.output_mon = outMonitor("output", dut.theta_out, dut.clk)
         self.expected_output = []
         self.scoreboard = Scoreboard(dut)
         self.scoreboard.add_interface(self.output_mon, self.expected_output, strict_type=True)
@@ -106,15 +105,15 @@ def gen_input(loop):
 @cocotb.test(skip = False, stage=1)
 def angle_test(dut):
     # Initialise signals
-    dut.RESET <= 1
+    dut.rst <= 1
     # Create clock
     CLK_PERIOD = 10
-    test=100
+    test=10
     cocotb.fork(Clock(dut.clk, CLK_PERIOD).start())
+    dut.sequence_in <= 0
     yield Timer(CLK_PERIOD * 5)
-    dut.RESET <= 0
+    dut.rst <= 0
     # call function of generate data
-    # dut.sequence_in <= 1
     dut.freq <= 1
     # call TB class
     tb = TB(dut)

@@ -1,71 +1,42 @@
 `timescale 1ns / 1ps
 
+
 module angle_venv(
   input clk,
-  input RESET,
+  input rst,
   input [9:0] theta_in,
-  input [1:0] freq, /* 1 = 50Hz; 0 = 60Hz, 2 = CLK(SIMU), 3 = 60Hz(SIMU) */
+  input freq,
   input sequence_in,
-  output reg CYCLE,
-  output [9:0] theta_out
+  output reg [9:0] theta_out
   );
 
-/* registers */
-reg [8:0] counter;
-reg [9:0] theta_gen_aux;
-reg [9:0] last_theta;//, last_theta_timeout;
-reg cycle_set;
+wire [8:0] w9_prescaler;
+reg [8:0] r9_prescaler_count;
+reg [9:0] r10_last_theta_rcv;
 
-/* wires */
-wire [8:0]max_count;
+assign w9_prescaler = freq? 9'd489: 9'd408; /* 489 -> 49.92Hz 408 -> 59.83Hz*/
 
-assign max_count = (freq == 3)?408:(freq == 2)?0:(freq == 1)?489:408; /* 489 -> 49.92Hz 408 -> 59.83Hz*/
-
-always @ (posedge clk) begin
-  if( RESET) begin
-    counter <= 0;
-    last_theta <= 0;
-    theta_gen_aux <= 0;
+always @(posedge clk)begin
+  if (rst) begin
+    r9_prescaler_count <= 9'd0;
+    theta_out <= 10'd0;
+    r10_last_theta_rcv <= 10'd0;
   end
-  else begin
-    if( theta_in != last_theta) begin
-      theta_gen_aux <= theta_in;
-      last_theta <= theta_in;
-      counter <= 9'd0;
-      CYCLE <= 1;
+  else
+    if (r10_last_theta_rcv != theta_in) begin
+      r10_last_theta_rcv <= theta_in;
+      theta_out <= theta_in;
+      r9_prescaler_count <= 9'd0;
     end
-    // else if( counter < max_count) begin
-    //   counter <= counter + 1;
-    // end
-    else begin
-      if( freq < 3) begin /* No new angle received */
-        if( sequence_in) begin
-          if( theta_gen_aux < 1023) begin
-            theta_gen_aux <= theta_gen_aux + 1;
-            CYCLE <= 1;
-          end
-          else begin
-            theta_gen_aux <= 0;
-            CYCLE <= 1;
-          end
-        end
-        else begin
-          if( theta_gen_aux > 0) begin
-            theta_gen_aux <= theta_gen_aux - 1;
-            CYCLE <= 0;
-          end
-          else begin
-            theta_gen_aux <= 1023;
-            CYCLE <= 1;
-          end
-        end
+    else
+      if (r9_prescaler_count < w9_prescaler)
+        r9_prescaler_count <= r9_prescaler_count+9'd1;
+      else begin
+        r9_prescaler_count <= 0;
+        theta_out <= sequence_in? theta_out+10'd1: theta_out-10'd1;
       end
-      counter <= 0;
-    end /* else*/
-  end /* else*/
-end /* always*/
+end
 
-assign theta_out = theta_gen_aux; /* Sawtooth generated according the phase sequence. */
 `ifndef VERILATOR
   // Dump waves
   // Gtkwave file
@@ -74,4 +45,9 @@ assign theta_out = theta_gen_aux; /* Sawtooth generated according the phase sequ
     $dumpvars(1, angle_venv);
   end
 `endif
+
+// Add assertion here
+// psl default clock = (posedge clk);
+// psl ERRORsum: assert never {sequence_in && CYCLE && theta_gen_aux=1023};
+ // ERRORreadempty: assert never {empty && rd_en && rd_cs};
 endmodule

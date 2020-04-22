@@ -37,5 +37,8 @@ end
     $dumpvars(1, adder);
   end
 `endif
-
+// Add assertion here
+// psl default clock = (posedge clk);
+// psl ERRORsum: assert never {dv };
+ // ERRORreadempty: assert never {empty && rd_en && rd_cs};
 endmodule

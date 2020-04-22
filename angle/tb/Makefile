@@ -5,6 +5,7 @@ MODULE=angle_test
 SIM=verilator
 # COCOTB_HDL_TIMEPRECISION = 1us
 EXTRA_ARGS += --coverage
-COCOTB_ANSI_OUTPUT=1
+# EXTRA_ARGS += --psl
+# COCOTB_ANSI_OUTPUT=1
 include $(shell cocotb-config --makefiles)/Makefile.inc
 include $(shell cocotb-config --makefiles)/Makefile.sim
