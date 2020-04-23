@@ -48,7 +48,7 @@ sudo apt-get install python3-matplotlib
 python -m pip install -U matplotlib
 
 
-# PARA GITLAB RUNNER:(activarlo)
+# Para GITLAB RUNNER:(activarlo)
 
 wget https://gitlab-runner-downloads.s3.amazonaws.com/master/deb/gitlab-runner_amd64.deb
 
@@ -60,9 +60,10 @@ sudo gitlab-runner run
 sudo gitlab-runner register
 https://docs.gitlab.com/runner/register/
 
-## activar gitlab runner run
+## activar gitlab runner
+run
 
-## PARA el TOML:
+## Para el TOML:
 si la imagen no esta en docker hub, hay que añadir en toml el pull policy = "if-not-present"
 
 ubicaciion: /etc/gitlab-runner/config
@@ -74,7 +75,8 @@ ir a la carpeta donde esta dockerfile y escribir: docker build -t cocotb:1.0.1 .
 docker run -i -v /home/sergioasn/repo/:/home/ -t multi:1.0.0 /bin/bash
 te copia la carpeta que pones al home del docker y poner nombre de la imagen y version, luego te abre el bash
 
-## Para borrar imagen escribir: docker rmi y el Id de la imagen
+## Para borrar imagen escribir:
+docker rmi y el Id de la imagen
 
 ## CUIDADO!! para poder poner por defecto el python 3:
 update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
