@@ -91,12 +91,14 @@ navigate till nexus-<version>/bin/
 run the server: ./nexus run
 
 ##registrar un servidor
-npm host
+Elegir el npm host para publicar codigo privado
+Si añadimos primero el user nos crea automáticamente el .npmrc
 añadir el registro del .npmrc:
 registry=http://your-host:8081/repository/npm-group/
 _auth=YWRtaW46YWRtaW4xMjM= es validad para admin/admin123
-si queremos otra para nuestra cuenta escribir en la terminal: echo -n 'myuser:mypassword' | openssl base64
-esa sera nuestro token
+si queremos otra para nuestra cuenta escribir en la terminal:
+echo -n 'myuser:mypassword' | openssl base64
+esa sera nuestro token que cambiaremos por el anteror de admin
 
 añadir usser:
 npm adduser --registry=http://10.20.100.245:8081/repository/verilog_probe/ --always-auth
