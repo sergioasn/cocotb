@@ -3,8 +3,6 @@
 ## cocotb
 adder_sample
 
-
-
 hoy to run : SIM=icarus pytest -s cocotest_adder_test.py
 
 # install gtkwave:
