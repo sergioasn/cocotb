@@ -1,7 +1,5 @@
 # SW installation
-##Virual folder with python3
-//Para usar otra version de python de la del home se crea una carpeta virtual
-//con un version especiifica
+## Virtual folder with python3
 python3 -m venv .venv
 - Activarlo:
 source .venv/bin/activate
@@ -9,57 +7,57 @@ source .venv/bin/activate
 deactivate
 
 # Python3
-apt-get install -y python3.6
-apt install -y python3-pip
+- apt-get install -y python3.6
+- apt install -y python3-pip
 
 ## Cocotb
-pip install cocotb
-pip install edalize
-pip install cocotb-test
-pip install cocotb-coverage
-sudo apt install python-pytest
+- pip install cocotb
+- pip install edalize
+- pip install cocotb-test
+- pip install cocotb-coverage
+- sudo apt install python-pytest
 
-## Gtkwave:
-sudo apt-get update -y
-sudo apt-get install -y gtkwave
+## Gtkwave
+- sudo apt-get update -y
+- sudo apt-get install -y gtkwave
 
 ## Aditional tools
-sudo apt update
-sudo apt install -y git make gnat zlib1g-dev
+- sudo apt update
+- sudo apt install -y git make gnat zlib1g-dev
 
 ## GHDL
-git clone https://github.com/ghdl/ghdl
-cd ghdl
-./configure --prefix=/usr/local
-make
-sudo make install
-echo "$0: All done!"
+- git clone https://github.com/ghdl/ghdl
+- cd ghdl
+- ./configure --prefix=/usr/local
+- make
+- sudo make install
+- echo "$0: All done!"
 
 ## Icarus
-sudo apt install iverilog
+- sudo apt install iverilog
 
 ## LCOV y gcc
-sudo apt-get update -y
-sudo apt-get install -y lcov
-install gcc
+- sudo apt-get update -y
+- sudo apt-get install -y lcov
+- install gcc
 
 ## Numpy
-pip3 install numpy
-sudo apt-get install python3-matplotlib
-python -m pip install -U matplotlib
+- pip3 install numpy
+- sudo apt-get install python3-matplotlib
+- python -m pip install -U matplotlib
 
 
 # GITLAB RUNNER:(activarlo)
-wget https://gitlab-runner-downloads.s3.amazonaws.com/master/deb/gitlab-runner_amd64.deb
-sudo dpkg -i gitlab-runner_amd64.deb
-sudo gitlab-runner run
+- wget https://gitlab-runner-downloads.s3.amazonaws.com/master/deb/gitlab-runner_amd64.deb
+- sudo dpkg -i gitlab-runner_amd64.deb
+- sudo gitlab-runner run
 
 ## Register a new runner:
-sudo gitlab-runner register
+- sudo gitlab-runner register
 https://docs.gitlab.com/runner/register/
 
 ## Activate gitlab runner
-sudo gitlab-runner run
+- sudo gitlab-runner run
 
 ## Configuration TOML:
 If the doccker image is not in docker hub, we have to addd into toml: pull policy = "if-not-present"
@@ -71,23 +69,24 @@ Open a terminal in the dockerfile route and enter: docker build -t cocotb:1.0.1 
 
 ## Create a docker container from a docker image:
 docker run -i -v /home/sergioasn/repo/:/home/ -t name:1.0.0 /bin/bash
+
 It copies the route folder into the route docker, then a docker name with version,
 it will open command line with bash
 
 ## Delete a docker image:
-docker rmi y el Id de la imagen --force
-docker rm ID_name removes docker image
+- docker rmi y el Id de la imagen --force
+- docker rm ID_name removes docker image
 
 ### CAUTION!! if we want to set python3 by default:
-update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
+- update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
 
 # Nexus server
-cd opt
-mkdir /install_dir
-Download from sanatype web
-Extract: tar xvzf nexus-<version>.<tar file extension>
-navigate till nexus-<version>/bin/
-run the server: ./nexus run
+- cd opt
+- mkdir /install_dir
+- Download from sanatype web
+- Extract: tar xvzf nexus-<version>.<tar file extension>
+- navigate till nexus-<version>/bin/
+- run the server: ./nexus run
 
 ## Registry a new server
 Elegir el npm host para publicar codigo privado
