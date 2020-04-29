@@ -71,19 +71,6 @@ class TB(object):
         outModel = transaction[0]+transaction[1]
         self.expected_output.append(outModel)
 
-    # def start(self):
-    #     """Start generating input data."""
-    #     self.input_mon.start()
-    #
-    # def stop(self):
-    #     """Stop generating input data.
-    #     Also stop generation of expected output transactions.
-    #     One more clock cycle must be executed afterwards so that the output of
-    #     the D flip-flop can be checked.
-    #     """
-    #     # self.input_drv.stop()
-    #     self.stopped = True
-
 # ==============================================================================
 def gen_input():
     # Generate random data
@@ -102,14 +89,14 @@ ADDER_Coverage = coverage_section (
   CoverCross(name ="top.rwXfull", items = ["top.(A <150)", "top.(A >250)"]),
 )
 # # ==============================================================================
-# @ADDER_Coverage
-# def check(dut,data0_in,data1_in):
-#     if int(dut.data_out) != adder_model(data0_in,data1_in):
-#         raise TestFailure(
-#             "Randomised test failed with: %s + %s = %s" %
-#             (int(dut.data0_in), int(dut.data1_in), int(dut.data_out)))
-#     #else:  # these last two lines are not strictly necessary
-#         #dut._log.info("Ok!")
+@ADDER_Coverage
+def check(dut,data0_in,data1_in):
+    if int(dut.data_out) != adder_model(data0_in,data1_in):
+        raise TestFailure(
+            "Randomised test failed with: %s + %s = %s" %
+            (int(dut.data0_in), int(dut.data1_in), int(dut.data_out)))
+    #else:  # these last two lines are not strictly necessary
+        #dut._log.info("Ok!")
 
 @cocotb.test(skip = False, stage=1)
 def adder_test(dut):
@@ -138,7 +125,7 @@ def adder_test(dut):
     # Stop the stimulus
     dut.dv <= 0
 
-    # coverage =coverage_db["top"].cover_percentage
-    # dut._log.info("Coverage = %f %%", coverage)
-    # coverage_db.report_coverage(dut._log.info, bins=True)
-    # coverage_db.export_to_xml(xml_name="coverage.xml")
+    coverage =coverage_db["top"].cover_percentage
+    dut._log.info("Coverage = %f %%", coverage)
+    coverage_db.report_coverage(dut._log.info, bins=True)
+    coverage_db.export_to_xml(xml_name="coverage.xml")

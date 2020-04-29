@@ -1,11 +1,5 @@
 `timescale 1ns / 1ps
-//*****************************************************************************
-// File:           adder.v
-// Project:
-// Author:         salonso
-// Description:    adder
-// Limitations/Bugs:
-//*****************************************************************************
+
 module adder(
   input clk,
   input reset,
@@ -37,8 +31,5 @@ end
     $dumpvars(1, adder);
   end
 `endif
-// Add assertion here
-// psl default clock = (posedge clk);
-// psl ERRORsum: assert never {dv };
- // ERRORreadempty: assert never {empty && rd_en && rd_cs};
+
 endmodule

@@ -65,6 +65,7 @@ sudo gitlab-runner run
 If the doccker image is not in docker hub, we have to addd into toml: pull policy = "if-not-present"
 Route: /etc/gitlab-runner/config
 
+# Docker
 ## Create a docker image:
 Open a terminal in the dockerfile route and enter: docker build -t cocotb:1.0.1 .
 
@@ -72,17 +73,15 @@ Open a terminal in the dockerfile route and enter: docker build -t cocotb:1.0.1 
 docker run -i -v /home/sergioasn/repo/:/home/ -t name:1.0.0 /bin/bash
 It copies the route folder into the route docker, then a docker name with version,
 it will open command line with bash
-te copia la carpeta que pones al home del docker y poner nombre de la imagen y version, luego te abre el bash
 
-## Para borrar imagen escribir:
+## Delete a docker image:
 docker rmi y el Id de la imagen --force
-docker rm ID_name para borra contenedor
+docker rm ID_name removes docker image
 
-## CUIDADO!! para poder poner por defecto el python 3:
+### CAUTION!! if we want to set python3 by default:
 update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
 
-
-##Para instalar servidor Nexus
+# Nexus server
 cd opt
 mkdir /install_dir
 Download from sanatype web
@@ -90,7 +89,7 @@ Extract: tar xvzf nexus-<version>.<tar file extension>
 navigate till nexus-<version>/bin/
 run the server: ./nexus run
 
-##registrar un servidor
+## Registry a new server
 Elegir el npm host para publicar codigo privado
 Si añadimos primero el user nos crea automáticamente el .npmrc
 añadir el registro del .npmrc:
@@ -108,5 +107,6 @@ Esto genera un archivo en el home del user con las claves para publicar
 importante en nexus3 ir a Security y Realms y añadir el siguiente realm
 npm Bearer Token Realm
 
-#
+### Additional comments
+How to run makefile with pytest
 hoy to run : SIM=icarus pytest -s cocotest_adder_test.py
