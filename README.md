@@ -1,30 +1,33 @@
-# Dependencies
+# SW installation
+##Virual folder with python3
+//Para usar otra version de python de la del home se crea una carpeta virtual
+//con un version especiifica
+python3 -m venv .venv
+- Activarlo:
+source .venv/bin/activate
+- desactivarlo
+deactivate
 
-## cocotb
-adder_sample
+# Python3
+apt-get install -y python3.6
+apt install -y python3-pip
 
-hoy to run : SIM=icarus pytest -s cocotest_adder_test.py
-
-# install gtkwave:
-sudo apt-get update -y
-sudo apt-get install -y gtkwave
-
-
-# Install cocotb:
+## Cocotb
 pip install cocotb
 pip install edalize
 pip install cocotb-test
 pip install cocotb-coverage
 sudo apt install python-pytest
 
-# instalar python3
-apt-get install -y python3.6
-apt install -y python3-pip
+## Gtkwave:
+sudo apt-get update -y
+sudo apt-get install -y gtkwave
 
-# Instalar herramientas necesarias adicionales
+## Aditional tools
 sudo apt update
 sudo apt install -y git make gnat zlib1g-dev
-#instalacion GHDL
+
+## GHDL
 git clone https://github.com/ghdl/ghdl
 cd ghdl
 ./configure --prefix=/usr/local
@@ -32,45 +35,43 @@ make
 sudo make install
 echo "$0: All done!"
 
-# install icarus
+## Icarus
 sudo apt install iverilog
 
-# instalar LCOV y gcc
+## LCOV y gcc
 sudo apt-get update -y
 sudo apt-get install -y lcov
 install gcc
 
-# instalar numpy
+## Numpy
 pip3 install numpy
 sudo apt-get install python3-matplotlib
 python -m pip install -U matplotlib
 
 
-# Para GITLAB RUNNER:(activarlo)
-
+# GITLAB RUNNER:(activarlo)
 wget https://gitlab-runner-downloads.s3.amazonaws.com/master/deb/gitlab-runner_amd64.deb
-
 sudo dpkg -i gitlab-runner_amd64.deb
 sudo gitlab-runner run
 
-
-## Registrar un nuevo runner:
+## Register a new runner:
 sudo gitlab-runner register
 https://docs.gitlab.com/runner/register/
 
-## activar gitlab runner
+## Activate gitlab runner
 sudo gitlab-runner run
 
-## Para el TOML:
-si la imagen no esta en docker hub, hay que añadir en toml el pull policy = "if-not-present"
+## Configuration TOML:
+If the doccker image is not in docker hub, we have to addd into toml: pull policy = "if-not-present"
+Route: /etc/gitlab-runner/config
 
-ubicaciion: /etc/gitlab-runner/config
+## Create a docker image:
+Open a terminal in the dockerfile route and enter: docker build -t cocotb:1.0.1 .
 
-## Crear imagen desde dockerfile:
-ir a la carpeta donde esta dockerfile y escribir: docker build -t cocotb:1.0.1 .
-
-## Para crear el contenedor a traves de la imagen anterior escribir:
-docker run -i -v /home/sergioasn/repo/:/home/ -t multi:1.0.0 /bin/bash
+## Create a docker container from a docker image:
+docker run -i -v /home/sergioasn/repo/:/home/ -t name:1.0.0 /bin/bash
+It copies the route folder into the route docker, then a docker name with version,
+it will open command line with bash
 te copia la carpeta que pones al home del docker y poner nombre de la imagen y version, luego te abre el bash
 
 ## Para borrar imagen escribir:
@@ -79,6 +80,7 @@ docker rm ID_name para borra contenedor
 
 ## CUIDADO!! para poder poner por defecto el python 3:
 update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
+
 
 ##Para instalar servidor Nexus
 cd opt
@@ -105,3 +107,6 @@ Esto genera un archivo en el home del user con las claves para publicar
 
 importante en nexus3 ir a Security y Realms y añadir el siguiente realm
 npm Bearer Token Realm
+
+#
+hoy to run : SIM=icarus pytest -s cocotest_adder_test.py
